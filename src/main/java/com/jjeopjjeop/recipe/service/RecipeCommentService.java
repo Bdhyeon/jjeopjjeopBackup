@@ -2,7 +2,6 @@ package com.jjeopjjeop.recipe.service;
 
 import com.jjeopjjeop.recipe.dao.RecipeCommentDAO;
 import com.jjeopjjeop.recipe.dto.RecipeCommentDTO;
-import com.jjeopjjeop.recipe.dto.RecipePageDTO;
 import com.jjeopjjeop.recipe.pagenation.Pagenation;
 
 import java.util.List;

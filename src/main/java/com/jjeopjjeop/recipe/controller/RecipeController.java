@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,8 +34,8 @@ public class RecipeController {
     // 레시피 목록 조회 메소드
     @GetMapping("/recipe/list")
     public ModelAndView rcpListMethod(@RequestParam(value="rcp_sort", required=false, defaultValue = "0") Integer rcp_sort,
-                                      @RequestParam(value="cate_seq", required=false, defaultValue = "0") int cate_seq,
-                                      @RequestParam(value="page", required=false, defaultValue = "1") int page, ModelAndView mav){
+                                      @RequestParam(value="cate_seq", required=false, defaultValue = "0") Integer cate_seq,
+                                      @RequestParam(value="page", required=false, defaultValue = "1") Integer page, ModelAndView mav){
 
         // 전체 레코드 수
         Pagenation pagenation = new Pagenation(page, service.countProcess(cate_seq), true);
@@ -63,9 +62,9 @@ public class RecipeController {
     // 레시피 목록 검색 메소드
     @GetMapping("/recipe/search")
     public ModelAndView rcpSearchMethod(@RequestParam(value="rcp_sort", required=false, defaultValue = "0") Integer rcp_sort,
-                                        @RequestParam(value="cate_seq", required=false, defaultValue = "0") int cate_seq,
+                                        @RequestParam(value="cate_seq", required=false, defaultValue = "0") Integer cate_seq,
                                         @RequestParam(value="searchKey", required=false) String searchKey,
-                                        @RequestParam(value="page", required=false, defaultValue = "1") int page,
+                                        @RequestParam(value="page", required=false, defaultValue = "1") Integer page,
                                         ModelAndView mav){
         // 전체 페이지 수
         Pagenation pagenation = new Pagenation(page, service.searchCountProcess(searchKey, cate_seq), true);
@@ -89,8 +88,8 @@ public class RecipeController {
     // 레시피 본문 조회 메소드
     @GetMapping("/recipe/view/{rcp_seq}")
     public ModelAndView rcpViewMethod(@PathVariable("rcp_seq") Integer rcp_seq,
-                                      @RequestParam(value="page", required=false, defaultValue = "1") int page,
-                                      @RequestParam(value="cate_seq", required=false, defaultValue = "0") int cate_seq,
+                                      @RequestParam(value="page", required=false, defaultValue = "1") Integer page,
+                                      @RequestParam(value="cate_seq", required=false, defaultValue = "0") Integer cate_seq,
                                       @RequestParam(value="rcp_sort", required=false, defaultValue = "0") Integer rcp_sort,
                                       @RequestParam(value="searchKey", required=false) String searchKey,
                                       HttpSession session, ModelAndView mav){
@@ -181,7 +180,8 @@ public class RecipeController {
 
     // 레시피 작성 메소드
     @PostMapping("/recipe/write")
-    public String rcpWriteProMethod(@Validated @ModelAttribute("recipeDTO") RecipeDTO recipeDTO, BindingResult bindingResult, String[] manual_txt,
+    public String rcpWriteProMethod(@Validated @ModelAttribute("recipeDTO") RecipeDTO recipeDTO,
+                                    BindingResult bindingResult, String[] manual_txt,
                                     @RequestParam(value="cateArr", required=false) List<String> cateArr, Model model,
                                     MultipartFile[] upload_manual, HttpServletRequest request, HttpSession session){
         // user_id 설정
@@ -229,7 +229,7 @@ public class RecipeController {
 
     // 레시피 수정 페이지 요청 메소드
     @GetMapping("/recipe/update")
-    public String rcpUpdateMethod(@RequestParam int rcp_seq, Model model, HttpSession session){
+    public String rcpUpdateMethod(@RequestParam Integer rcp_seq, Model model, HttpSession session){
         RecipeDTO recipeDTO = service.contentProcess(rcp_seq);
         if(session.getAttribute("user_id") == null || !session.getAttribute("user_id").equals(recipeDTO.getUser_id())){
             return "error/500";
@@ -304,7 +304,7 @@ public class RecipeController {
 
     // 레시피 삭제 메소드
     @GetMapping("/recipe/delete")
-    public String rcpDeleteMethod(@RequestParam int rcp_seq, HttpServletRequest request, HttpSession session){
+    public String rcpDeleteMethod(@RequestParam Integer rcp_seq, HttpServletRequest request, HttpSession session){
         RecipeDTO recipeDTO = service.contentProcess(rcp_seq);
 
         int userType = ((UserDTO) session.getAttribute("user")).getUsertype();
@@ -318,7 +318,7 @@ public class RecipeController {
     }
 
     // 첨부파일 처리를 위한 메소드
-    private String urlPath(HttpServletRequest request, int num){
+    private String urlPath(HttpServletRequest request, Integer num){
         String root = "";
         if(num==0){
             root = "/usr/local/tomcat9/webapps/jjeopjjeopRecipe/WEB-INF/classes/static/media/recipe/";
@@ -328,7 +328,7 @@ public class RecipeController {
         return root;
     }
 
-    private UUID saveCopyFile(MultipartFile file, HttpServletRequest request, int num){
+    private UUID saveCopyFile(MultipartFile file, HttpServletRequest request, Integer num){
         String fileName = file.getOriginalFilename();
         UUID random = UUID.randomUUID();
 
